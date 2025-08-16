@@ -123,10 +123,10 @@ The analysis compared two LLM-based approaches on a sample of 50 reviews to eval
 - **F1-Score**: 0.620
 
 #### OpenAI Performance
-- **Accuracy**: 0.480 (48.0%)
-- **Precision**: 0.230
-- **Recall**: 0.480
-- **F1-Score**: 0.311
+- **Accuracy**: 0.840 (84.0%)
+- **Precision**: 0.843
+- **Recall**: 0.840
+- **F1-Score**: 0.840
 
 ### Detailed Performance Analysis
 
@@ -189,6 +189,24 @@ The dataset shows a balanced distribution of sentiments:
 #### Topic_5
 - **Top Terms**: explorer, expedition, vehicle, suv, ford explorer, br, quot, seat
 - **Review Count**: 187
+- **Sample Reviews**: 3 examples
+
+#### Positive_Topics
+- **Summary**: 
+                Analyze the following positive car reviews and identify the main topics/aspects that customers praise.
+                Extract 3-5 key topics and provide a brief description of each.
+                
+                Reviews: Some of you might have read my previous post on the Ford T...
+- **Review Count**: 612
+- **Sample Reviews**: 3 examples
+
+#### Negative_Topics
+- **Summary**: 
+                Analyze the following negative car reviews and identify the main topics/aspects that customers complain about.
+                Extract 3-5 key topics and provide a brief description of each.
+                
+                Reviews: In 1992 we bought a new Taurus and we really loved...
+- **Review Count**: 612
 - **Sample Reviews**: 3 examples
 
 ### Topic Extraction Quality Assessment
@@ -269,6 +287,8 @@ The analysis includes comprehensive visualizations showing:
 - Comparative analysis of different LLM approaches
 - Accuracy, precision, recall, and F1-score visualization
 - Model performance benchmarking
+
+![alt text](image.png)
 
 ## Key Insights and Recommendations
 

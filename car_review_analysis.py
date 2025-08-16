@@ -13,7 +13,10 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Set up the environment
-plt.style.use('seaborn-v0_8')
+try:
+    plt.style.use('seaborn-v0_8')
+except:
+    plt.style.use('default')
 sns.set_palette("husl")
 
 class CarReviewAnalyzer:
@@ -81,9 +84,11 @@ class CarReviewAnalyzer:
             self.topic_pipeline = pipeline(
                 "text-generation",
                 model="gpt2",
-                max_length=100,
+                max_new_tokens=100,
                 do_sample=True,
-                temperature=0.7
+                temperature=0.7,
+                pad_token_id=50256,
+                truncation=True
             )
             print("✓ GPT-2 topic model loaded")
         except Exception as e:
@@ -142,22 +147,21 @@ class CarReviewAnalyzer:
             return None
             
         try:
-            openai.api_key = self.openai_api_key
-            
             prompt = f"""
             Analyze the sentiment of the following car review. 
-            Classify it as positive or negative only.
+            Classify it as positive, negative, or neutral.
             Provide a confidence score (0-1) and brief explanation.
             
             Review: {text[:1000]}
             
             Format your response as:
-            Sentiment: [positive/negative]
+            Sentiment: [positive/negative/neutral]
             Confidence: [0.0-1.0]
             Explanation: [brief reason]
             """
             
-            response = openai.ChatCompletion.create(
+            client = openai.OpenAI(api_key=self.openai_api_key)
+            response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}],
                 max_tokens=150,
@@ -327,7 +331,7 @@ class CarReviewAnalyzer:
                 """
                 
                 if self.topic_pipeline:
-                    pos_response = self.topic_pipeline(pos_prompt, max_length=200)[0]['generated_text']
+                    pos_response = self.topic_pipeline(pos_prompt, max_new_tokens=200)[0]['generated_text']
                     topics['Positive_Topics'] = {
                         'summary': pos_response,
                         'count': len(positive_reviews),
@@ -347,7 +351,7 @@ class CarReviewAnalyzer:
                 """
                 
                 if self.topic_pipeline:
-                    neg_response = self.topic_pipeline(neg_prompt, max_length=200)[0]['generated_text']
+                    neg_response = self.topic_pipeline(neg_prompt, max_new_tokens=200)[0]['generated_text']
                     topics['Negative_Topics'] = {
                         'summary': neg_response,
                         'count': len(negative_reviews),
